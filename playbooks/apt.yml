@@ -1,0 +1,9 @@
+---
+
+- hosts: all
+  become: yes
+  tasks: 
+     - name: apt # the built-in ansible apt module
+       apt:
+          update_cache: yes # the equivalent to running apt-get update
+          upgrade: 'yes' # pretty safe option

@@ -1,0 +1,44 @@
+---
+
+- hosts: all
+  become: true
+  tasks:
+
+  - name: update repository index
+    apt:
+         update_cache: yes
+    when: ansible_distribution == "Ubuntu"  # <-- for just one distro
+    when: ansible_distribution == "Ubuntu" and ansible_distribution_version == "8.2"  # <-- for specific version (you can see this in the gather_facts module output)
+    when: ansible_distribution in ["Debian", "Ubuntu"]  # <-- for multiple distros
+
+  - name: install <package_name>
+    apt:
+         name: <package_name>
+              - <package_name> # <-- or you can add them underneath to clean up the playbook a bit, instead of having another block below
+         state: latest
+         update_cache: yes # <-- or you can add this to make the first block unnecessary 
+    when: ansible_distribution == "Ubuntu"
+
+- name: install <another_package_name>
+    apt:
+         name: <another_package_name>
+         state: latest
+    when: ansible_distribution == "Ubuntu"
+
+# Just add these 3 task-blocks again, underneath, for different distributions with different package managers
+# Or if you want to consolidate all the blocks above, use this block below, which references {{variables}}:
+
+- hosts: all (or you can specify a role)
+  become: true
+  tasks:
+
+  - name: install <package_name> and <another_package_name>
+    tags: name_of_tag
+    package: <-- generic package manager, instead of specifying
+        name:
+              - "{{ custom_var }}" <-- create the variables in vars directory: custom_var=package_name
+              - "{{ another_custom_var }}"
+        state: latest
+        upgrade: dist <-- (can remove this if using the bootstrap.yml)
+        update_cache: yes
+        changed_when: false <-- controls whether it registers a change (use this with the bootstrap.yml)
