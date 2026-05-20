@@ -1,7 +1,5 @@
----
-
 - name: Apt Update
-  hosts: all
+  hosts: "*" # all hosts
   become: yes
   
   tasks: 
