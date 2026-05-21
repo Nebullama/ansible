@@ -28,17 +28,17 @@
 # Just add these 3 task-blocks again, underneath, for different distributions with different package managers
 # Or if you want to consolidate all the blocks above, use this block below, which references {{variables}}:
 
-- hosts: all (or you can specify a role)
+- hosts: all # (or you can specify a role)
   become: true
   tasks:
 
   - name: install <package_name> and <another_package_name>
     tags: name_of_tag
-    package: <-- generic package manager, instead of specifying
+    package: # <-- generic package manager, instead of specifying
         name:
-              - "{{ custom_var }}" <-- create the variables in vars directory: custom_var=package_name
+              - "{{ custom_var }}" # <-- create the variables in vars directory: custom_var=package_name
               - "{{ another_custom_var }}"
         state: latest
-        upgrade: dist <-- (can remove this if using the bootstrap.yml)
+        upgrade: dist # <-- (can remove this if using the bootstrap.yml)
         update_cache: yes
-        changed_when: false <-- controls whether it registers a change (use this with the bootstrap.yml)
+        changed_when: false # <-- controls whether it registers a change (use this with the bootstrap.yml)
